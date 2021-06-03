@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eShop.Data;
+using eShop.Data.EF;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace eShop.WebApp
 {
@@ -13,7 +16,16 @@ namespace eShop.WebApp
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            using (var scope = host.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<EShopDbContext>();
+                var seeding = new Seeding(context);
+                seeding.SeedData();
+
+            }
+            host.Run();
+            //CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

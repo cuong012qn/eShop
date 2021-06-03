@@ -8,6 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eShop.Application.Interfaces;
+using eShop.Application.Services;
+using eShop.Data.EF;
+using Microsoft.EntityFrameworkCore;
 
 namespace eShop.WebApp
 {
@@ -23,7 +27,12 @@ namespace eShop.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<EShopDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("EShopDb")));
+
             services.AddControllersWithViews();
+            
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICategoryService, CategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
