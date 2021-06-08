@@ -9,7 +9,7 @@ namespace eShop.Application.Interfaces
 {
     public interface IProductService
     {
-        public Task<List<ProductViewModel>> GetProducts();
+        public Task<List<ProductViewModel>> GetProducts(int take = -1);
 
         public Task<ProductViewModel> GetProductById(string productId);
     }

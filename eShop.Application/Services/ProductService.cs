@@ -20,28 +20,54 @@ namespace eShop.Application.Services
             _context = context;
         }
 
-        public async Task<List<ProductViewModel>> GetProducts()
+        public async Task<List<ProductViewModel>> GetProducts(int take = -1)
         {
-            return await _context.Products
-                .Select(x => new ProductViewModel
-                {
-                    Id = x.Id,
-                    DateCreated = x.DateCreated,
-                    Description = x.Description,
-                    Name = x.Name,
-                    ProductCount = x.ProductCount,
-                    PromotionPrice = x.PromotionPrice,
-                    Stock = x.Stock,
-                    UnitPrice = x.UnitPrice,
-                    Categories = x.ProductCategories
-                        .Where(pc=> pc.ProductId.Equals(x.Id))
-                        .Select(categoryVm => new CategoryViewModel()
-                        {
-                            Id = categoryVm.Category.Id,
-                            Name =  categoryVm.Category.Name,
-                            Link = "#" + categoryVm.Category.Name
-                        }).ToList()
-                }).ToListAsync();
+            if (take < 0)
+            {
+                return await _context.Products
+                    .Select(x => new ProductViewModel
+                    {
+                        Id = x.Id,
+                        DateCreated = x.DateCreated,
+                        Description = x.Description,
+                        Name = x.Name,
+                        ProductCount = x.ProductCount,
+                        PromotionPrice = x.PromotionPrice,
+                        Stock = x.Stock,
+                        UnitPrice = x.UnitPrice,
+                        Categories = x.ProductCategories
+                            .Where(pc => pc.ProductId.Equals(x.Id))
+                            .Select(categoryVm => new CategoryViewModel()
+                            {
+                                Id = categoryVm.Category.Id,
+                                Name = categoryVm.Category.Name,
+                                Link = "#" + categoryVm.Category.Name
+                            }).ToList()
+                    }).ToListAsync();
+            }
+            else
+            {
+                return await _context.Products
+                    .Select(x => new ProductViewModel
+                    {
+                        Id = x.Id,
+                        DateCreated = x.DateCreated,
+                        Description = x.Description,
+                        Name = x.Name,
+                        ProductCount = x.ProductCount,
+                        PromotionPrice = x.PromotionPrice,
+                        Stock = x.Stock,
+                        UnitPrice = x.UnitPrice,
+                        Categories = x.ProductCategories
+                            .Where(pc => pc.ProductId.Equals(x.Id))
+                            .Select(categoryVm => new CategoryViewModel()
+                            {
+                                Id = categoryVm.Category.Id,
+                                Name = categoryVm.Category.Name,
+                                Link = "#" + categoryVm.Category.Name
+                            }).ToList()
+                    }).Take(take).ToListAsync();
+            }
         }
 
         public async Task<ProductViewModel> GetProductById(string productId)
