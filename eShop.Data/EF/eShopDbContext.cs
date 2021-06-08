@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,16 @@ namespace eShop.Data.EF
                 .HasOne(x => x.Category)
                 .WithMany(x => x.ProductCategories)
                 .HasForeignKey(x => x.CategoryId);
+
+            modelBuilder.Entity<Category>()
+                .HasMany(x => x.ProductCategories)
+                .WithOne(x => x.Category)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Product>()
+                .HasMany(x => x.ProductCategories)
+                .WithOne(x => x.Product)
+                .OnDelete(DeleteBehavior.SetNull);
 
             base.OnModelCreating(modelBuilder);
         }
