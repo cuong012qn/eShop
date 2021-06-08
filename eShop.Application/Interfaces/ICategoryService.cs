@@ -13,5 +13,13 @@ namespace eShop.Application.Interfaces
         Task<List<CategoryViewModel>> GetCategories();
 
         Task<CategoryViewModel> GetCategoryById(int id);
+
+        List<CategoryViewModel> GetProductsByCategories(int takeCategory = -1, int takeProduct = -1);
+
+        Task<bool> Add(CategoryViewModel category);
+
+        Task<bool> Remove(int id);
+
+        Task<bool> Update(int id, CategoryViewModel category);
     }
 }
